@@ -40,9 +40,9 @@ public class PasswordVerifier {
             if (!checkList.get(2)) log += "\npassword should have one uppercase letter at least";
             if (!checkList.get(3)) log += "\npassword should have one lowercase letter at least";
             if (!checkList.get(4)) log += "\npassword should have one number at least";
-            logger.warning(log);
+            throw new IllegalArgumentException(log);
         }catch(IllegalArgumentException e){
-        throw new IllegalArgumentException(logHand.getLog());}
+            logger.warning(log);}
         count = checkList.stream().filter(p -> p).count();
     }
 
