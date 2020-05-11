@@ -40,8 +40,44 @@ public class PasswordVerifierTest {
     }
 
     @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK(){
-        PasswordVerifier.Verify("aaaaa11a");
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case1(){
+        PasswordVerifier.Verify("asdfghjL1");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case2(){
+        PasswordVerifier.Verify("asdfghjkL");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case3(){
+        PasswordVerifier.Verify("asdfghjk1");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case4(){
+        PasswordVerifier.Verify("asdfghjkl");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case5(){
+        PasswordVerifier.Verify("123456789");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case6(){
+        PasswordVerifier.Verify("ASDFGHJ1");
+        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
+    }
+
+    @Test
+    public void ifThreeConditions_areTrue_return_PasswordIsOK_case7(){
+        PasswordVerifier.Verify("asdfghj1");
         assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
     }
 
