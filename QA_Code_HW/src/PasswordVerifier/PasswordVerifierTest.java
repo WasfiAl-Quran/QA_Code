@@ -1,89 +1,79 @@
 package PasswordVerifier;
 
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
+import java.util.*;
+import java.util.logging.*;
 
-public class PasswordVerifierTest {
+public class PasswordVerifier {
 
-    PasswordVerifier PasswordVerifier = new PasswordVerifier();
+    ArrayList<Boolean> checkList = new ArrayList<>(Arrays.asList(false, false, false, false, false));
+    Logger logger = Logger.getLogger("main.java");
+    LogHand logHand = new LogHand();
+    long count;
+    String log = "";
 
-    @Test
-    public void passwordShouldBeLargerThan8Chars(){
-        PasswordVerifier.Verify("aAAA11a");
-        assertThat(PasswordVerifier.logHand.getLog(), containsString("password should be larger than 8 chars"));
+    public void Verify(String password) {
+
+        Logger.getLogger("main.java").addHandler(logHand);
+
+        if (!(password.length() <= 8))
+            checkList.set(0, true);
+
+        if (!password.isEmpty())
+            checkList.set(1, true);
+
+        for (int i = 0; i < password.length(); i++) {
+
+            if (Character.isUpperCase(password.charAt(i)))
+                checkList.set(2, true);
+
+            if (Character.isLowerCase(password.charAt(i)))
+                checkList.set(3, true);
+
+            if (Character.isDigit(password.charAt(i)))
+                checkList.set(4, true);
+
+        }
+
+        try {
+            if (!checkList.get(0)) throw new IllegalArgumentException("\npassword should be larger than 8 chars");
+        } catch (IllegalArgumentException e) {
+            log += "\npassword should be larger than 8 chars\n";
+        }
+        try {
+            if (!checkList.get(1)) throw new IllegalArgumentException("\npassword should not be null");
+        } catch (IllegalArgumentException e) {
+            log += "\npassword should not be null\n";
+        }
+        try {
+            if (!checkList.get(2))
+                throw new IllegalArgumentException("\npassword should have one uppercase letter at least");
+        } catch (IllegalArgumentException e) {
+            log += "\npassword should have one uppercase letter at least\n";
+        }
+        try {
+            if (!checkList.get(3))
+                throw new IllegalArgumentException("\npassword should have one lowercase letter at least");
+        } catch (IllegalArgumentException e) {
+            log += "\npassword should have one lowercase letter at least\n";
+        }
+        try {
+            if (!checkList.get(4)) throw new IllegalArgumentException("\npassword should have one number at least");
+        } catch (IllegalArgumentException e) {
+            log += "\npassword should have one number at least\n";
+        }
+
+        if (!log.isEmpty()) logger.warning(log);
+        count = checkList.stream().filter(p -> p).count();
+    }
+    public String is_PasswordOK (){
+        if (count >= 3)
+            return "Password is OK";
+        return "";
     }
 
-    @Test
-    public void passwordShouldNotBeNull(){
-        PasswordVerifier.Verify("");
-        assertThat(PasswordVerifier.logHand.getLog(), containsString("password should not be null"));
-    }
-
-    @Test
-    public void passwordShouldHaveOneUppercaseLetterAtLeast(){
-        PasswordVerifier.Verify("aaaaaa11a");
-        assertThat(PasswordVerifier.logHand.getLog(), containsString("password should have one uppercase letter at least"));
-    }
-
-    @Test
-    public void passwordShouldHaveOneLowercaseLetterAtLeast(){
-        PasswordVerifier.Verify("AAAAAAAA");
-        assertThat(PasswordVerifier.logHand.getLog(), containsString("password should have one lowercase letter at least"));
-    }
-
-    @Test
-    public void passwordShouldHaveOneNumberAtLeast(){
-        PasswordVerifier.Verify("aAAAAAAAa");
-        assertThat(PasswordVerifier.logHand.getLog(), containsString("password should have one number at least"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case1(){
-        PasswordVerifier.Verify("asdfghjL1");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case2(){
-        PasswordVerifier.Verify("asdfghjkL");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case3(){
-        PasswordVerifier.Verify("asdfghjk1");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case4(){
-        PasswordVerifier.Verify("asdfghjkl");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case5(){
-        PasswordVerifier.Verify("123456789");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case6(){
-        PasswordVerifier.Verify("ASDFGHJ1");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifThreeConditions_areTrue_return_PasswordIsOK_case7(){
-        PasswordVerifier.Verify("asdfghj1");
-        assertTrue(PasswordVerifier.is_PasswordOK ().contains("Password is OK"));
-    }
-
-    @Test
-    public void ifNotOneLowercaseLetterAtLeast_return_PasswordIsNeverOK(){
-        PasswordVerifier.Verify("AAAAA11A");
-        assertTrue(PasswordVerifier.is_PasswordNeverOK ().contains("Password is never OK"));
+    public String is_PasswordNeverOK (){
+        if (!checkList.get(3))
+            return "Password is never OK";
+        return "";
     }
 }
